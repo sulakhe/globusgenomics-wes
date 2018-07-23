@@ -1,0 +1,90 @@
+{
+    "a_galaxy_workflow": "true", 
+    "annotation": "", 
+    "format-version": "0.1", 
+    "name": "cwl_tools", 
+    "steps": {
+        "0": {
+            "annotation": "", 
+            "content_id": "cwl_prepare_inputs", 
+            "errors": null, 
+            "id": 0, 
+            "input_connections": {}, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool CWL Prepare Inputs", 
+                    "name": "inputs"
+                }
+            ], 
+            "label": null, 
+            "name": "CWL Prepare Inputs", 
+            "outputs": [
+                {
+                    "name": "json_inputs_output", 
+                    "type": "data"
+                }
+            ], 
+            "position": {
+                "left": 200, 
+                "top": 200.5
+            }, 
+            "post_job_actions": {}, 
+            "tool_id": "cwl_prepare_inputs", 
+            "tool_state": "{\"inputs\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"__page__\": null}", 
+            "tool_version": "1.0.0", 
+            "type": "tool", 
+            "uuid": "bd2db571-99cf-452b-abf1-b4b8245b4a9f", 
+            "workflow_outputs": [
+                {
+                    "label": null, 
+                    "output_name": "json_inputs_output", 
+                    "uuid": "c54a5f98-732e-418f-ae4d-94e7f0e35482"
+                }
+            ]
+        }, 
+        "1": {
+            "annotation": "", 
+            "content_id": "cwl_runner", 
+            "errors": null, 
+            "id": 1, 
+            "input_connections": {
+                "inputs": {
+                    "id": 0, 
+                    "output_name": "json_inputs_output"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool CWL Runner", 
+                    "name": "inputs"
+                }
+            ], 
+            "label": null, 
+            "name": "CWL Runner", 
+            "outputs": [
+                {
+                    "name": "output", 
+                    "type": "data"
+                }
+            ], 
+            "position": {
+                "left": 490, 
+                "top": 200.5
+            }, 
+            "post_job_actions": {}, 
+            "tool_id": "cwl_runner", 
+            "tool_state": "{\"inputs\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"cwl_file\": \"\\\"\\\"\", \"__page__\": null}", 
+            "tool_version": "1.0.0", 
+            "type": "tool", 
+            "uuid": "ca9eef22-9387-493e-9c68-bebf5592f823", 
+            "workflow_outputs": [
+                {
+                    "label": null, 
+                    "output_name": "output", 
+                    "uuid": "4c9f40ec-a1e6-45ac-b955-03bdf730099b"
+                }
+            ]
+        }
+    }, 
+    "uuid": "f83684f1-7247-4a3b-a56a-c5fc649186b2"
+}
