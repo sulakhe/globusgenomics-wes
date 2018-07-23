@@ -30,5 +30,7 @@ def __delete_workflow(workflow_id):
     }
     """
 
-def __submit_workflow(parameters, api_key):
+def __submit_workflow(parameters=None, gi_handle=None, workflow=None):
+    # format for CWL_runner_workflow is always the following:
+    # params={}
     return "1234"
