@@ -143,7 +143,7 @@ def __import_galaxy_cwl_workflow(minid=None, gi=None):
     wf_mine = None
     try:
         # A.
-	ga_file = app.config["CWL_RUNNER_WORKFLOW_GA"]
+        ga_file = app.config["CWL_RUNNER_WORKFLOW_GA"]
 
         # B.
         ga_dict = None
