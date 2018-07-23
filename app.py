@@ -7,18 +7,16 @@ import time
 import os
 import sys
 import globus_sdk
-import ConfigParser
 
 app = Flask(__name__)
+app.config.from_pyfile('config_file.cfg')
 
-local_configs_dir = '/home/galaxy/.globusgenomics'
-config_file_name = 'commons_app_config'
-config_file = os.path.join(local_configs_dir, config_file_name)
-Config = ConfigParser.ConfigParser()
-Config.read(config_file)
+print(app.config)
 
-master_key = Config.get("server", "master_key")
-url = Config.get("server", "url")
+master_key = app.config['GALAXY_MASTER_KEY']
+print(master_key)
+url = app.config['URL']
+
 cwl_runner_galaxy_workflow_minid = "ark:/57799/b93q6h"
 QUERY_BASE = "http://minid.bd2k.org/minid/landingpage/"
 
@@ -27,6 +25,7 @@ QUERY_BASE = "http://minid.bd2k.org/minid/landingpage/"
 
 @app.route('/service-info', methods=['GET'])
 def get_service_info():
+    print(app.config['url'])
     return weshandler.__service_info()
 
 # This is the resource to return all the workflows available on the service
@@ -77,13 +76,13 @@ def __get_galaxy_user(auth):
     user_list = gi.users.get_users( f_name=globus_user )
     galaxy_user = None
     for user in user_list:
-	if globus_user == user['username']:
-	    galaxy_user = user
-	    break
+    	if globus_user == user['username']:
+    	    galaxy_user = user
+    	    break
 	
     if galaxy_user is None:
         # __create_galaxy_user(globus_user)
-	galaxy_user = __create_galaxy_user(globus_user, gi)
+        galaxy_user = __create_galaxy_user(globus_user, gi)
    
     # __create_API_key(galaxy_user)
     api_key = gi.users.get_user_apikey(galaxy_user['id'])
@@ -95,9 +94,9 @@ def __get_galaxy_user(auth):
 def __get_globus_user(token):
     # Using Auth token, get the globus username and return the username
     # start globus client
-    client_id = Config.get('globus', 'client_id')
-    client_secret = Config.get('globus', 'client_secret')
-    redirect_uri = Config.get('globus', 'redirect_uri')
+    client_id = app.config['GLOBUS_CLIENT_ID']
+    client_secret = app.config['GLOBUS_CLIENT_SECRET']
+    redirect_uri = app.config['GLOBUS_REDIRECT_URI']
     client = globus_sdk.ConfidentialAppAuthClient(client_id, client_secret)
     client.oauth2_start_flow(redirect_uri)
 
@@ -120,22 +119,22 @@ def __get_globus_user(token):
     auth_data = dependent_token_info.by_resource_server['auth.globus.org']
     auth_token = auth_data['access_token']
 
-    dir_name =  os.path.join(local_configs_dir, 'tokens')
+    dir_name =  os.path.join(app.config['GLOBUS_TOKEN_FILES_DIR'], 'tokens')
     if not os.path.isdir(dir_name):
-        os.mkdir(dir_name, 0700)
+        os.mkdir(dir_name, mode=0o700)
     record_file = os.path.join(dir_name, username)
     with open(record_file, 'w') as write_file:
         write_file.write(transfer_token)
 
-    dir_name =  os.path.join(local_configs_dir, 'tokens-auth')
+    dir_name =  os.path.join(app.config['GLOBUS_TOKEN_FILES_DIR'], 'tokens-auth')
     if not os.path.isdir(dir_name):
-        os.mkdir(dir_name, 0700)
+        os.mkdir(dir_name, mode=0o700)
     record_file = os.path.join(dir_name, username)
     with open(record_file, 'w') as write_file:
         write_file.write(auth_token)
 
     return username
-    
+
 
 def __create_galaxy_user(globus_user, gi):
     user_email = "%s@globusid.org" % globus_user

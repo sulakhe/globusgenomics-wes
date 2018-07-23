@@ -22,3 +22,4 @@ SQLAlchemy-Utils==0.33.3
 urllib3==1.23
 URLObject==2.4.3
 Werkzeug==0.14.1
+globus_sdk==1.5.0
