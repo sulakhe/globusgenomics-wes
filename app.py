@@ -11,10 +11,7 @@ import globus_sdk
 app = Flask(__name__)
 app.config.from_pyfile('config_file.cfg')
 
-print(app.config)
-
 master_key = app.config['GALAXY_MASTER_KEY']
-print(master_key)
 url = app.config['URL']
 
 cwl_runner_galaxy_workflow_minid = "ark:/57799/b93q6h"
