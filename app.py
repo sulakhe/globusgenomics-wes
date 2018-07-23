@@ -143,23 +143,7 @@ def __import_galaxy_cwl_workflow(minid=None, gi=None):
     wf_mine = None
     try:
         # A.
-        BASE_DOWNLOAD_PATH = "/%s" % (tmp_path)
-        query = "%s/%s" % (QUERY_BASE, wf_minid)
-        #print( "Executing query: %s" % query)
-        r = requests.get(query,  headers = {"Accept" : "application/json"})
-        location = r.json()["locations"][0]['link']
-        filename = location.split("/")[-1]
-        path = "%s/%s" % (BASE_DOWNLOAD_PATH, filename)
-        #print( "Downloading result: %s" % location)
-        testfile = urllib.URLopener()
-        testfile.retrieve(location, path)
-        extract_path = ".".join(path.split(".")[0:-1])
-        output_path = "%s/%s" %(extract_path, ".".join(filename.split(".")[0:-1]))
-        #print( "Extracting bag and resolving fetch: %s" % output_path)
-        bdbag_api.extract_bag(path, extract_path)
-        time.sleep(5)
-        bdbag_api.resolve_fetch(output_path, True)
-        ga_file = glob.glob("%s/data/*.ga" % (output_path))[0]
+	ga_file = app.config["CWL_RUNNER_WORKFLOW_GA"]
 
         # B.
         ga_dict = None
