@@ -20,22 +20,22 @@ QUERY_BASE = "http://minid.bd2k.org/minid/landingpage/"
 #db = SQLAlchemy(app)
 
 
-@app.route('/service-info', methods=['GET'])
+@app.route('/wes/service-info', methods=['GET'])
 def get_service_info():
-    print(app.config['url'])
     return weshandler.__service_info()
 
 # This is the resource to return all the workflows available on the service
-@app.route('/workflows', methods=['GET'])
+@app.route('/wes/workflows', methods=['GET'])
 def get_workflows():
  	return weshandler.__get_workflows()
 
 # This is the resource to submit a workflow
 # Takes a JSON Paylod with parameters and return the ID for the run.
-@app.route('/workflows', methods=['POST'])
+@app.route('/wes/workflows', methods=['POST'])
 def submit_workflow():
 
-    parameters = request.get_json(silent=False)
+    parameters = str(request.get_json(silent=False))
+    parameters = parameters.replace('\'', '"')
 
     if(request.headers['Authorization']):
         api_key = __get_galaxy_user(request.headers['Authorization'])
@@ -45,28 +45,26 @@ def submit_workflow():
 
     gi = GalaxyInstance(url=url, key=api_key)
     wf = __import_galaxy_cwl_workflow(minid=cwl_runner_galaxy_workflow_minid, gi=gi)
-    runid = weshandler.__submit_workflow(parameters=parameters, gi_handle=gi, workflow=wf)
+    runid = weshandler.__submit_workflow(json_param=parameters, gi_handle=gi, workflow=wf)
     return runid
 
 ## This resource provides detailed info on a workflow run
-@app.route('/workflows/<workflow_id>', methods=['GET'])
+@app.route('/wes/workflows/<workflow_id>', methods=['GET'])
 def get_workflow_run_details(workflow_id=None):
 	return ""
 
 ## This resource provides detailed info on a workflow run
-@app.route('/workflows/<workflow_id>', methods=['DELETE'])
+@app.route('/wes/workflows/<workflow_id>', methods=['DELETE'])
 def delete_workflow(workflow_id=None):
 	return weshandler.__delete_workflow(workflow_id)
 
 ## This resource provides status of a workflow run
-@app.route('/workflows/<workflow_id>/status')
+@app.route('/wes/workflows/<workflow_id>/status')
 def workflow_status(workflow_id=None):
     return "RUNNING"
 
 def __get_galaxy_user(auth):
     globus_user = __get_globus_user(auth)
-    master_key = __config__("master_key")
-    url = __config__("url")
     gi = GalaxyInstance(url=url, key=master_key)
 
     # Map the globus username to Galaxy username
@@ -74,8 +72,8 @@ def __get_galaxy_user(auth):
     galaxy_user = None
     for user in user_list:
     	if globus_user == user['username']:
-    	    galaxy_user = user
-    	    break
+            galaxy_user = user
+            break
 	
     if galaxy_user is None:
         # __create_galaxy_user(globus_user)
@@ -83,7 +81,7 @@ def __get_galaxy_user(auth):
    
     # __create_API_key(galaxy_user)
     api_key = gi.users.get_user_apikey(galaxy_user['id'])
-    if api_key is None:
+    if api_key == "Not available.":
         api_key = gi.users.create_user_apikey(galaxy_user['id'])
     return api_key
 
@@ -139,21 +137,15 @@ def __create_galaxy_user(globus_user, gi):
     return user
 
 def __import_galaxy_cwl_workflow(minid=None, gi=None):
-    tmp_path = tempfile.mkdtemp()
     wf_mine = None
-    try:
-        # A.
-        ga_file = app.config["CWL_RUNNER_WORKFLOW_GA"]
-
-        # B.
-        ga_dict = None
-        with open(ga_file) as handle:
-            ga_dict = json.loads(handle.read())
-        if ga_dict is not None:
-            wf_mine = gi.workflows.import_workflow_dict(ga_dict)
-
-    finally:
-        shutil.rmtree(tmp_path)
+    # A.
+    ga_file = app.config["CWL_RUNNER_WORKFLOW_GA"]
+    # B.
+    ga_dict = None
+    with open(ga_file) as handle:
+        ga_dict = json.loads(handle.read())
+    if ga_dict is not None:
+        wf_mine = gi.workflows.import_workflow_dict(ga_dict)
 	
     return wf_mine
 

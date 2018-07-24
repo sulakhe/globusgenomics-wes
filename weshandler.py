@@ -1,4 +1,4 @@
-
+import time
 
 def __service_info():
 	return """
@@ -36,12 +36,12 @@ def __submit_workflow(json_param=None, gi_handle=None, workflow=None):
 		
     # create a history
     history_name = "topmed_history_cwl_runner_%s" % time.strftime("%a_%b_%d_%Y_%-I:%M:%S_%p",time.localtime(time.time()))
-    history = gi.histories.create_history(name=history_name)
+    history = gi_handle.histories.create_history(name=history_name)
     wf_data = {}
     wf_data['workflow_id'] = workflow['id']
     wf_data['ds_map'] = {}
     parameters = {}
     parameters['0'] = {'inputs' : json_param}
     wf_data['parameters'] = parameters
-    res = gi.workflows.invoke_workflow(wf_data['workflow_id'], wf_data['ds_map'], params=wf_data['parameters'], history_id=history['id'], import_inputs_to_history=False)
-    return res
+    res = gi_handle.workflows.invoke_workflow(wf_data['workflow_id'], wf_data['ds_map'], params=wf_data['parameters'], history_id=history['id'], import_inputs_to_history=False)
+    return res['id']
