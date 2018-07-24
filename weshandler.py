@@ -14,21 +14,29 @@ def __service_info():
 	}
 	"""
 
-def __get_workflows():
-	return """
-    {
-      "workflows": []
-    }
-	"""
+def __get_workflows(gi):
+    workflows = gi.workflows.get_workflows()
+    invocations = []
+    for wf in workflows:
+        if 'cwl_tools' in wf['name']:
+            for invoke in gi.workflows.get_invocations(wf['id']):
+                invocations.append(invoke['id'])
+    return { "workflows": invocations }
 
-def __delete_workflow(workflow_id):
+def __get_workflow_status(gi, invocation_id):
+    invocation = gi.workflows.get_invocations(invocation_id)
+    return invocation['state']
+
+def __get_workflow_details(gi, invocation_id):
+    invocation = gi.workflows.get_invocations(invocation_id)
+    details = gi.workflows.show_invocation(invocation['workflow_id'], invocation_id)
+    return details
+
+def __delete_workflow(gi, invocation_id):
 	## Delete the workflow with exception handling:
-
-	return """
-    {
-      "workflow_id": workflow_id
-    }
-    """
+    invocation = gi.workflows.get_invocations(invocation_id)
+    del_inv = gi.workflows.cancel_invocation(invocation['workflow_id'], invocation_id)
+    return del_inv
 
 def __submit_workflow(json_param=None, gi_handle=None, workflow=None):
     # format for CWL_runner_workflow is always the following:

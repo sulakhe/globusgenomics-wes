@@ -27,7 +27,15 @@ def get_service_info():
 # This is the resource to return all the workflows available on the service
 @app.route('/wes/workflows', methods=['GET'])
 def get_workflows():
- 	return weshandler.__get_workflows()
+    if(request.headers['Authorization']):
+        api_key = __get_galaxy_user(request.headers['Authorization'])
+    else:
+        print ("Inside Else")
+        return Response('Globus Auth token required..', 401, {'WWW-Authenticate': 'Basic realm="Tokens Required"'})
+
+    gi = GalaxyInstance(url=url, key=api_key)
+
+    return weshandler.__get_workflows(gi)
 
 # This is the resource to submit a workflow
 # Takes a JSON Paylod with parameters and return the ID for the run.
@@ -51,17 +59,41 @@ def submit_workflow():
 ## This resource provides detailed info on a workflow run
 @app.route('/wes/workflows/<workflow_id>', methods=['GET'])
 def get_workflow_run_details(workflow_id=None):
-	return ""
+    if(request.headers['Authorization']):
+        api_key = __get_galaxy_user(request.headers['Authorization'])
+    else:
+        print ("Inside Else")
+        return Response('Globus Auth token required..', 401, {'WWW-Authenticate': 'Basic realm="Tokens Required"'})
+
+    gi = GalaxyInstance(url=url, key=api_key)
+
+    return weshandler.__get_workflow_details(gi, workflow_id):
 
 ## This resource provides detailed info on a workflow run
 @app.route('/wes/workflows/<workflow_id>', methods=['DELETE'])
 def delete_workflow(workflow_id=None):
-	return weshandler.__delete_workflow(workflow_id)
+    if(request.headers['Authorization']):
+        api_key = __get_galaxy_user(request.headers['Authorization'])
+    else:
+        print ("Inside Else")
+        return Response('Globus Auth token required..', 401, {'WWW-Authenticate': 'Basic realm="Tokens Required"'})
+
+    gi = GalaxyInstance(url=url, key=api_key)
+
+    return weshandler.__delete_workflow(gi, workflow_id)
 
 ## This resource provides status of a workflow run
 @app.route('/wes/workflows/<workflow_id>/status')
 def workflow_status(workflow_id=None):
-    return "RUNNING"
+    if(request.headers['Authorization']):
+        api_key = __get_galaxy_user(request.headers['Authorization'])
+    else:
+        print ("Inside Else")
+        return Response('Globus Auth token required..', 401, {'WWW-Authenticate': 'Basic realm="Tokens Required"'})
+
+    gi = GalaxyInstance(url=url, key=api_key)
+
+    return weshandler.__get_workflow_status(gi, workflow_id)
 
 def __get_galaxy_user(auth):
     globus_user = __get_globus_user(auth)
