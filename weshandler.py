@@ -24,7 +24,13 @@ def __get_workflows(gi):
     return { "workflows": invocations }
 
 def __get_workflow_status(gi, invocation_id):
-    invocation = gi.workflows.get_invocations(wf['id'])
+    invocation = gi.workflows.get_invocations(invocation_id)
+    return invocation['state']
+
+def __get_workflow_details(gi, invocation_id):
+    invocation = gi.workflows.get_invocations(invocation_id)
+    details = gi.workflows.show_invocation(invocation['workflow_id'], invocation_id)
+    return details
 
 def __delete_workflow(workflow_id):
 	## Delete the workflow with exception handling:
