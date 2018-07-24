@@ -32,14 +32,11 @@ def __get_workflow_details(gi, invocation_id):
     details = gi.workflows.show_invocation(invocation['workflow_id'], invocation_id)
     return details
 
-def __delete_workflow(workflow_id):
+def __delete_workflow(gi, invocation_id):
 	## Delete the workflow with exception handling:
-
-	return """
-    {
-      "workflow_id": workflow_id
-    }
-    """
+    invocation = gi.workflows.get_invocations(invocation_id)
+    del_inv = gi.workflows.cancel_invocation(invocation['workflow_id'], invocation_id)
+    return del_inv
 
 def __submit_workflow(json_param=None, gi_handle=None, workflow=None):
     # format for CWL_runner_workflow is always the following:
