@@ -69,7 +69,15 @@ def delete_workflow(workflow_id=None):
 ## This resource provides status of a workflow run
 @app.route('/wes/workflows/<workflow_id>/status')
 def workflow_status(workflow_id=None):
-    return "RUNNING"
+    if(request.headers['Authorization']):
+        api_key = __get_galaxy_user(request.headers['Authorization'])
+    else:
+        print ("Inside Else")
+        return Response('Globus Auth token required..', 401, {'WWW-Authenticate': 'Basic realm="Tokens Required"'})
+
+    gi = GalaxyInstance(url=url, key=api_key)
+
+    return weshandler.__get_workflow_status(gi, workflow_id)
 
 def __get_galaxy_user(auth):
     globus_user = __get_globus_user(auth)
