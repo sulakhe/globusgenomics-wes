@@ -14,12 +14,14 @@ def __service_info():
 	}
 	"""
 
-def __get_workflows():
-	return """
-    {
-      "workflows": []
-    }
-	"""
+def __get_workflows(gi):
+    workflows = gi.workflows.get_workflows()
+    invocations = []
+    for wf in workflows:
+        if 'cwl_tools' in wf['name']:
+            for invoke in gi.workflows.get_invocations(wf['id']):
+                invocations.append(invoke['id'])
+    return { "workflows": invocations }
 
 def __delete_workflow(workflow_id):
 	## Delete the workflow with exception handling:
