@@ -27,7 +27,15 @@ def get_service_info():
 # This is the resource to return all the workflows available on the service
 @app.route('/wes/workflows', methods=['GET'])
 def get_workflows():
- 	return weshandler.__get_workflows()
+    if(request.headers['Authorization']):
+        api_key = __get_galaxy_user(request.headers['Authorization'])
+    else:
+        print ("Inside Else")
+        return Response('Globus Auth token required..', 401, {'WWW-Authenticate': 'Basic realm="Tokens Required"'})
+
+    gi = GalaxyInstance(url=url, key=api_key)
+
+    return weshandler.__get_workflows(gi)
 
 # This is the resource to submit a workflow
 # Takes a JSON Paylod with parameters and return the ID for the run.
