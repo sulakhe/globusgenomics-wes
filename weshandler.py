@@ -20,7 +20,7 @@ def __get_workflows(gi):
     for wf in workflows:
         if 'cwl_tools' in wf['name']:
             for invoke in gi.workflows.get_invocations(wf['id']):
-                invocations.append(invoke['id'])
+                invocations.append( { "workflow_id" : invoke['id'], "state" : invoke['state'] })
     return { "workflows": invocations }
 
 def __get_workflow_status(gi, invocation_id):

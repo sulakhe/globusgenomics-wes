@@ -67,7 +67,7 @@ def get_workflow_run_details(workflow_id=None):
 
     gi = GalaxyInstance(url=url, key=api_key)
 
-    return weshandler.__get_workflow_details(gi, workflow_id):
+    return weshandler.__get_workflow_details(gi, workflow_id)
 
 ## This resource provides detailed info on a workflow run
 @app.route('/wes/workflows/<workflow_id>', methods=['DELETE'])
