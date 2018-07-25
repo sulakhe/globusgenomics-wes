@@ -1,6 +1,6 @@
 import time
 import json
-from flask import Flask, request, jsonify
+from flask import jsonify
 
 
 def __service_info():
