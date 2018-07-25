@@ -21,26 +21,26 @@
             "outputs": [
                 {
                     "name": "json_inputs_output", 
-                    "type": "data"
+                    "type": "txt"
                 }
             ], 
             "position": {
                 "left": 200, 
                 "top": 200.5
             }, 
-            "post_job_actions": {}, 
+            "post_job_actions": {
+                "HideDatasetActionjson_inputs_output": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "json_inputs_output"
+                }
+            }, 
             "tool_id": "cwl_prepare_inputs", 
             "tool_state": "{\"inputs\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"__page__\": null}", 
             "tool_version": "1.0.0", 
             "type": "tool", 
             "uuid": "bd2db571-99cf-452b-abf1-b4b8245b4a9f", 
-            "workflow_outputs": [
-                {
-                    "label": null, 
-                    "output_name": "json_inputs_output", 
-                    "uuid": "c54a5f98-732e-418f-ae4d-94e7f0e35482"
-                }
-            ]
+            "workflow_outputs": []
         }, 
         "1": {
             "annotation": "", 
@@ -65,6 +65,14 @@
                 {
                     "name": "output", 
                     "type": "data"
+                }, 
+                {
+                    "name": "stdout", 
+                    "type": "txt"
+                }, 
+                {
+                    "name": "stderr", 
+                    "type": "txt"
                 }
             ], 
             "position": {
@@ -82,9 +90,57 @@
                     "label": null, 
                     "output_name": "output", 
                     "uuid": "4c9f40ec-a1e6-45ac-b955-03bdf730099b"
+                }, 
+                {
+                    "label": null, 
+                    "output_name": "stderr", 
+                    "uuid": "06700940-49b0-4212-972a-8593197af49b"
+                }, 
+                {
+                    "label": null, 
+                    "output_name": "stdout", 
+                    "uuid": "2bfb9104-3ddc-4692-86f9-823cb707f324"
                 }
             ]
+        }, 
+        "2": {
+            "annotation": "", 
+            "content_id": "create_output_bdbag_and_minid2", 
+            "errors": null, 
+            "id": 2, 
+            "input_connections": {
+                "input": {
+                    "id": 1, 
+                    "output_name": "stdout"
+                }
+            }, 
+            "inputs": [], 
+            "label": null, 
+            "name": "Create BDBag and MINID2", 
+            "outputs": [
+                {
+                    "name": "minid", 
+                    "type": "txt"
+                }
+            ], 
+            "position": {
+                "left": 711, 
+                "top": 218
+            }, 
+            "post_job_actions": {
+                "HideDatasetActionminid": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "minid"
+                }
+            }, 
+            "tool_id": "create_output_bdbag_and_minid2", 
+            "tool_state": "{\"__page__\": null, \"url\": \"\\\"**\\\"\", \"__rerun_remap_job_id__\": null, \"historyid\": \"\\\"**\\\"\", \"input\": \"{\\\"values\\\": [{\\\"src\\\": \\\"hda\\\", \\\"id\\\": 2679}]}\", \"goauth\": \"\\\"**\\\"\", \"userapi\": \"\\\"**\\\"\"}", 
+            "tool_version": "1.0.0", 
+            "type": "tool", 
+            "uuid": "41028253-1d4b-426a-b1c1-d0d2f56b8bda", 
+            "workflow_outputs": []
         }
     }, 
-    "uuid": "f83684f1-7247-4a3b-a56a-c5fc649186b2"
+    "uuid": "972854e0-5589-4544-b708-082afb09bc23"
 }
