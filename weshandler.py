@@ -20,11 +20,13 @@ def __get_workflows(gi):
     for wf in workflows:
         if 'cwl_tools' in wf['name']:
             for invoke in gi.workflows.get_invocations(wf['id']):
-                invocations.append( { "workflow_id" : invoke['id'], "state" : invoke['state'] })
+                history_state = gi.histories.get_status(invoke['history_id'])['state']
+                invocations.append( { "workflow_id" : invoke['id'], "state" : history_state })
     return { "workflows": invocations }
 
 def __get_workflow_status(gi, invocation_id):
     invocation = gi.workflows.get_invocations(invocation_id)
+    history_state = gi.histories.get_status(invocation['history_id'])['state']
     return invocation['state']
 
 def __get_workflow_details(gi, invocation_id):
@@ -52,4 +54,5 @@ def __submit_workflow(json_param=None, gi_handle=None, workflow=None):
     parameters['0'] = {'inputs' : json_param}
     wf_data['parameters'] = parameters
     res = gi_handle.workflows.invoke_workflow(wf_data['workflow_id'], wf_data['ds_map'], params=wf_data['parameters'], history_id=history['id'], import_inputs_to_history=False)
+    submit_wes_id = "%s-%s" % (workflow['id'], res['id'])
     return res['id']
