@@ -60,4 +60,4 @@ def __submit_workflow(json_param=None, gi_handle=None, workflow=None):
     wf_data['parameters'] = parameters
     res = gi_handle.workflows.invoke_workflow(wf_data['workflow_id'], wf_data['ds_map'], params=wf_data['parameters'], history_id=history['id'], import_inputs_to_history=False)
     submit_wes_id = "%s-%s" % (workflow['id'], res['id'])
-    return res['id']
+    return { "workflow_id" : submit_wes_id }
