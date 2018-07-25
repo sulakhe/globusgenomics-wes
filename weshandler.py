@@ -26,9 +26,10 @@ def __get_workflows(gi):
     return { "workflows": invocations }
 
 def __get_workflow_status(gi, invocation_id):
-    invocation = gi.workflows.get_invocations(invocation_id)
+    (wf_id, inv_id) = invocation_id.split("-")
+    invocation = gi.workflows.show_invocation(wf_id, inv_id)
     history_state = gi.histories.get_status(invocation['history_id'])['state']
-    return invocation['state']
+    return history_state
 
 def __get_workflow_details(gi, invocation_id):
     invocation = gi.workflows.get_invocations(invocation_id)
