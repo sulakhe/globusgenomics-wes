@@ -1,6 +1,7 @@
 import time
 import json
 
+
 def __service_info():
 	return """
 	{
@@ -24,9 +25,7 @@ def __get_workflows(gi):
                 history_state = gi.histories.get_status(invoke['history_id'])['state']
                 wf_wes_id = "%s-%s" % (wf['id'], invoke['id'])
                 invocations.append( { "workflow_id" : wf_wes_id, "state" : history_state })
-    #json_obj = json.dumps({ "workflows": invocations })
-    #return json_obj, 200
-    return { "workflows": invocations }, 200
+    return { "workflows": invocations }
 	
 def __get_workflow_status(gi, invocation_id):
     (wf_id, inv_id) = invocation_id.split("-")
