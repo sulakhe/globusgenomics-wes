@@ -154,7 +154,7 @@ def __get_globus_user(token):
             os.mkdir(dir_name, mode=0o700)
         record_file = os.path.join(dir_name, username)
         with open(record_file, 'w') as write_file:
-            write_file.write(oken)
+            write_file.write(token)
 
     record_token('tokens', transfer_token)
     record_token('tokens-auth', auth_token)
