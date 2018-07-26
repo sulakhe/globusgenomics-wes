@@ -145,20 +145,20 @@ def __get_globus_user(token):
     transfer_token = transfer_data['access_token']
     auth_data = dependent_token_info.by_resource_server['auth.globus.org']
     auth_token = auth_data['access_token']
+    identifiers_data = dependent_token_info.by_resource_server['identifiers.globus.org']
+    identifiers_token = identifiers_data['access_token']
 
-    dir_name =  os.path.join(app.config['GLOBUS_TOKEN_FILES_DIR'], 'tokens')
-    if not os.path.isdir(dir_name):
-        os.mkdir(dir_name, mode=0o700)
-    record_file = os.path.join(dir_name, username)
-    with open(record_file, 'w') as write_file:
-        write_file.write(transfer_token)
+    def record_token(dir_type, token):
+        dir_name =  os.path.join(app.config['GLOBUS_TOKEN_FILES_DIR'], dir_type)
+        if not os.path.isdir(dir_name):
+            os.mkdir(dir_name, mode=0o700)
+        record_file = os.path.join(dir_name, username)
+        with open(record_file, 'w') as write_file:
+            write_file.write(oken)
 
-    dir_name =  os.path.join(app.config['GLOBUS_TOKEN_FILES_DIR'], 'tokens-auth')
-    if not os.path.isdir(dir_name):
-        os.mkdir(dir_name, mode=0o700)
-    record_file = os.path.join(dir_name, username)
-    with open(record_file, 'w') as write_file:
-        write_file.write(auth_token)
+    record_token('tokens', transfer_token)
+    record_token('tokens-auth', auth_token)
+    record_token('tokens-identifiers', identifiers_token)
 
     return username
 
