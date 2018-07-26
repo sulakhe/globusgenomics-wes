@@ -53,8 +53,7 @@ def submit_workflow():
 
     gi = GalaxyInstance(url=url, key=api_key)
     wf = __import_galaxy_cwl_workflow(minid=cwl_runner_galaxy_workflow_minid, gi=gi)
-    runid = weshandler.__submit_workflow(json_param=parameters, gi_handle=gi, workflow=wf)
-    return runid
+    return json.dumps(weshandler.__submit_workflow(json_param=parameters, gi_handle=gi, workflow=wf))
 
 ## This resource provides detailed info on a workflow run
 @app.route('/wes/workflows/<workflow_id>', methods=['GET'])
