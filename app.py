@@ -22,7 +22,7 @@ QUERY_BASE = "http://minid.bd2k.org/minid/landingpage/"
 
 @app.route('/wes/service-info', methods=['GET'])
 def get_service_info():
-    return weshandler.__service_info()
+    return json.dumps(weshandler.__service_info())
 
 # This is the resource to return all the workflows available on the service
 @app.route('/wes/workflows', methods=['GET'])
@@ -35,7 +35,7 @@ def get_workflows():
 
     gi = GalaxyInstance(url=url, key=api_key)
 
-    return weshandler.__get_workflows(gi)
+    return json.dumps(weshandler.__get_workflows(gi))
 
 # This is the resource to submit a workflow
 # Takes a JSON Paylod with parameters and return the ID for the run.
@@ -66,7 +66,7 @@ def get_workflow_run_details(workflow_id=None):
 
     gi = GalaxyInstance(url=url, key=api_key)
 
-    return weshandler.__get_workflow_details(gi, workflow_id)
+    return json.dumps(weshandler.__get_workflow_details(gi, workflow_id))
 
 ## This resource provides detailed info on a workflow run
 @app.route('/wes/workflows/<workflow_id>', methods=['DELETE'])
@@ -79,7 +79,7 @@ def delete_workflow(workflow_id=None):
 
     gi = GalaxyInstance(url=url, key=api_key)
 
-    return weshandler.__delete_workflow(gi, workflow_id)
+    return json.dumps(weshandler.__delete_workflow(gi, workflow_id))
 
 ## This resource provides status of a workflow run
 @app.route('/wes/workflows/<workflow_id>/status')
@@ -92,7 +92,7 @@ def workflow_status(workflow_id=None):
 
     gi = GalaxyInstance(url=url, key=api_key)
 
-    return weshandler.__get_workflow_status(gi, workflow_id)
+    return json.dumps(weshandler.__get_workflow_status(gi, workflow_id))
 
 def __get_galaxy_user(auth):
     globus_user = __get_globus_user(auth)
