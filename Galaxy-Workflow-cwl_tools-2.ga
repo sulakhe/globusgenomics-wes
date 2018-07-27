@@ -2,119 +2,81 @@
     "a_galaxy_workflow": "true", 
     "annotation": "", 
     "format-version": "0.1", 
-    "name": "cwl_tools", 
+    "name": "Copy of 'cwl_tools (imported from API)'", 
     "steps": {
         "0": {
             "annotation": "", 
-            "content_id": "cwl_prepare_inputs", 
+            "content_id": "cwl_runner_with_download", 
             "errors": null, 
             "id": 0, 
             "input_connections": {}, 
             "inputs": [
                 {
-                    "description": "runtime parameter for tool CWL Prepare Inputs", 
+                    "description": "runtime parameter for tool CWL Runner with Download", 
                     "name": "inputs"
                 }
             ], 
             "label": null, 
-            "name": "CWL Prepare Inputs", 
-            "outputs": [
-                {
-                    "name": "json_inputs_output", 
-                    "type": "txt"
-                }
-            ], 
-            "position": {
-                "left": 200, 
-                "top": 200.5
-            }, 
-            "post_job_actions": {
-                "HideDatasetActionjson_inputs_output": {
-                    "action_arguments": {}, 
-                    "action_type": "HideDatasetAction", 
-                    "output_name": "json_inputs_output"
-                }
-            }, 
-            "tool_id": "cwl_prepare_inputs", 
-            "tool_state": "{\"inputs\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"__page__\": null}", 
-            "tool_version": "1.0.0", 
-            "type": "tool", 
-            "uuid": "bd2db571-99cf-452b-abf1-b4b8245b4a9f", 
-            "workflow_outputs": []
-        }, 
-        "1": {
-            "annotation": "", 
-            "content_id": "cwl_runner", 
-            "errors": null, 
-            "id": 1, 
-            "input_connections": {
-                "inputs": {
-                    "id": 0, 
-                    "output_name": "json_inputs_output"
-                }
-            }, 
-            "inputs": [
-                {
-                    "description": "runtime parameter for tool CWL Runner", 
-                    "name": "inputs"
-                }
-            ], 
-            "label": null, 
-            "name": "CWL Runner", 
+            "name": "CWL Runner with Download", 
             "outputs": [
                 {
                     "name": "output", 
                     "type": "data"
                 }, 
                 {
-                    "name": "stdout", 
+                    "name": "stdout_output", 
                     "type": "txt"
                 }, 
                 {
-                    "name": "stderr", 
+                    "name": "stderr_output", 
                     "type": "txt"
                 }
             ], 
             "position": {
-                "left": 490, 
-                "top": 200.5
+                "left": 200, 
+                "top": 370
             }, 
             "post_job_actions": {}, 
-            "tool_id": "cwl_runner", 
+            "tool_id": "cwl_runner_with_download", 
             "tool_state": "{\"inputs\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"cwl_file\": \"\\\"\\\"\", \"__page__\": null}", 
             "tool_version": "1.0.0", 
             "type": "tool", 
-            "uuid": "ca9eef22-9387-493e-9c68-bebf5592f823", 
+            "uuid": "ce216a4e-fbbb-49fa-be72-84c479d4744f", 
             "workflow_outputs": [
                 {
                     "label": null, 
+                    "output_name": "stderr_output", 
+                    "uuid": "254c170c-3e57-4b20-be21-77273bbab38c"
+                }, 
+                {
+                    "label": null, 
+                    "output_name": "stdout_output", 
+                    "uuid": "0e38b1f0-29fe-4ec5-9a10-0e395060481d"
+                }, 
+                {
+                    "label": null, 
                     "output_name": "output", 
-                    "uuid": "4c9f40ec-a1e6-45ac-b955-03bdf730099b"
-                }, 
-                {
-                    "label": null, 
-                    "output_name": "stderr", 
-                    "uuid": "06700940-49b0-4212-972a-8593197af49b"
-                }, 
-                {
-                    "label": null, 
-                    "output_name": "stdout", 
-                    "uuid": "2bfb9104-3ddc-4692-86f9-823cb707f324"
+                    "uuid": "62d56f67-b1db-44b2-9585-5aaa8e52a246"
                 }
             ]
         }, 
-        "2": {
+        "1": {
             "annotation": "", 
             "content_id": "create_output_bdbag_and_minid2", 
             "errors": null, 
-            "id": 2, 
+            "id": 1, 
             "input_connections": {
                 "input": {
-                    "id": 1, 
-                    "output_name": "stdout"
+                    "id": 0, 
+                    "output_name": "stdout_output"
                 }
             }, 
-            "inputs": [], 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Create BDBag and MINID2", 
+                    "name": "input"
+                }
+            ], 
             "label": null, 
             "name": "Create BDBag and MINID2", 
             "outputs": [
@@ -124,8 +86,8 @@
                 }
             ], 
             "position": {
-                "left": 711, 
-                "top": 218
+                "left": 500, 
+                "top": 358
             }, 
             "post_job_actions": {
                 "HideDatasetActionminid": {
@@ -135,12 +97,12 @@
                 }
             }, 
             "tool_id": "create_output_bdbag_and_minid2", 
-            "tool_state": "{\"__page__\": null, \"url\": \"\\\"**\\\"\", \"__rerun_remap_job_id__\": null, \"historyid\": \"\\\"**\\\"\", \"input\": \"{\\\"values\\\": [{\\\"src\\\": \\\"hda\\\", \\\"id\\\": 2679}]}\", \"goauth\": \"\\\"**\\\"\", \"userapi\": \"\\\"**\\\"\"}", 
+            "tool_state": "{\"__page__\": null, \"url\": \"\\\"**\\\"\", \"__rerun_remap_job_id__\": null, \"historyid\": \"\\\"**\\\"\", \"input\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"goauth\": \"\\\"**\\\"\", \"userapi\": \"\\\"**\\\"\"}", 
             "tool_version": "1.0.0", 
             "type": "tool", 
-            "uuid": "41028253-1d4b-426a-b1c1-d0d2f56b8bda", 
+            "uuid": "069a9fb5-f23c-4e93-9ef8-9aa0e9f8ee45", 
             "workflow_outputs": []
         }
     }, 
-    "uuid": "972854e0-5589-4544-b708-082afb09bc23"
+    "uuid": "272c2664-5b7e-43d2-9ab9-dedcbab79b02"
 }
