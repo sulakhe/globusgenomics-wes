@@ -44,7 +44,7 @@ def __delete_workflow(gi, invocation_id):
 	## Delete the workflow with exception handling:
     (wf_id, inv_id) = invocation_id.split("-")
     invocation = gi.workflows.show_invocation(wf_id, inv_id)
-    del_inv = gi.workflows.cancel_invocation(invocation['workflow_id'], invocation_id)
+    del_inv = gi.workflows.cancel_invocation(invocation['workflow_id'], inv_id)
     return { "workflow_id" : invocation_id }
 
 def __submit_workflow(json_param=None, gi_handle=None, workflow=None):
