@@ -22,7 +22,7 @@ QUERY_BASE = "http://minid.bd2k.org/minid/landingpage/"
 
 @app.route('/wes/service-info', methods=['GET'])
 def get_service_info():
-    return weshandler.__service_info()
+    return json.dumps(weshandler.__service_info())
 
 # This is the resource to return all the workflows available on the service
 @app.route('/wes/workflows', methods=['GET'])
@@ -35,7 +35,7 @@ def get_workflows():
 
     gi = GalaxyInstance(url=url, key=api_key)
 
-    return weshandler.__get_workflows(gi)
+    return json.dumps(weshandler.__get_workflows(gi))
 
 # This is the resource to submit a workflow
 # Takes a JSON Paylod with parameters and return the ID for the run.
@@ -53,8 +53,7 @@ def submit_workflow():
 
     gi = GalaxyInstance(url=url, key=api_key)
     wf = __import_galaxy_cwl_workflow(minid=cwl_runner_galaxy_workflow_minid, gi=gi)
-    runid = weshandler.__submit_workflow(json_param=parameters, gi_handle=gi, workflow=wf)
-    return runid
+    return json.dumps(weshandler.__submit_workflow(json_param=parameters, gi_handle=gi, workflow=wf))
 
 ## This resource provides detailed info on a workflow run
 @app.route('/wes/workflows/<workflow_id>', methods=['GET'])
@@ -67,7 +66,7 @@ def get_workflow_run_details(workflow_id=None):
 
     gi = GalaxyInstance(url=url, key=api_key)
 
-    return weshandler.__get_workflow_details(gi, workflow_id)
+    return json.dumps(weshandler.__get_workflow_details(gi, workflow_id))
 
 ## This resource provides detailed info on a workflow run
 @app.route('/wes/workflows/<workflow_id>', methods=['DELETE'])
@@ -80,7 +79,7 @@ def delete_workflow(workflow_id=None):
 
     gi = GalaxyInstance(url=url, key=api_key)
 
-    return weshandler.__delete_workflow(gi, workflow_id)
+    return json.dumps(weshandler.__delete_workflow(gi, workflow_id))
 
 ## This resource provides status of a workflow run
 @app.route('/wes/workflows/<workflow_id>/status')
@@ -93,7 +92,7 @@ def workflow_status(workflow_id=None):
 
     gi = GalaxyInstance(url=url, key=api_key)
 
-    return weshandler.__get_workflow_status(gi, workflow_id)
+    return json.dumps(weshandler.__get_workflow_status(gi, workflow_id))
 
 def __get_galaxy_user(auth):
     globus_user = __get_globus_user(auth)
@@ -145,20 +144,20 @@ def __get_globus_user(token):
     transfer_token = transfer_data['access_token']
     auth_data = dependent_token_info.by_resource_server['auth.globus.org']
     auth_token = auth_data['access_token']
+    identifiers_data = dependent_token_info.by_resource_server['identifiers.globus.org']
+    identifiers_token = identifiers_data['access_token']
 
-    dir_name =  os.path.join(app.config['GLOBUS_TOKEN_FILES_DIR'], 'tokens')
-    if not os.path.isdir(dir_name):
-        os.mkdir(dir_name, mode=0o700)
-    record_file = os.path.join(dir_name, username)
-    with open(record_file, 'w') as write_file:
-        write_file.write(transfer_token)
+    def record_token(dir_type, token):
+        dir_name =  os.path.join(app.config['GLOBUS_TOKEN_FILES_DIR'], dir_type)
+        if not os.path.isdir(dir_name):
+            os.mkdir(dir_name, mode=0o700)
+        record_file = os.path.join(dir_name, username)
+        with open(record_file, 'w') as write_file:
+            write_file.write(token)
 
-    dir_name =  os.path.join(app.config['GLOBUS_TOKEN_FILES_DIR'], 'tokens-auth')
-    if not os.path.isdir(dir_name):
-        os.mkdir(dir_name, mode=0o700)
-    record_file = os.path.join(dir_name, username)
-    with open(record_file, 'w') as write_file:
-        write_file.write(auth_token)
+    record_token('tokens', transfer_token)
+    record_token('tokens-auth', auth_token)
+    record_token('tokens-identifiers', identifiers_token)
 
     return username
 
