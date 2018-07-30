@@ -44,7 +44,7 @@ def __get_workflow_details(gi, invocation_id):
             if "Minid for history" in content['name'] and content['deleted'] is False:
                 id = content['id']
                 dataset_content = gi.datasets.show_dataset(id)['peek']
-                outputs = json.loads(dataset_content)
+                outputs = dataset_content
 
     workflow_log = { "name": "string", "cmd": [ "string" ], "start_time": invocation["update_time"], "end_time": "string", "stdout": "string", "stderr": "string", "exit_code": 0 }
     return { "outputs" : outputs, "workflow_id" : invocation_id, "state" : history_state, "task_logs": invocation['steps'], "workflow_log" : workflow_log}
