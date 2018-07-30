@@ -68,7 +68,7 @@ def __get_workflow_details(gi, invocation_id):
         for content in gi.histories.show_history(invocation['history_id'], contents=True):
             if "Minid for history" in content['name'] and content['deleted'] is False:
                 id = content['id']
-                dataset_info = gi.datasets.show_dataset(dataset['id'])
+                dataset_info = gi.datasets.show_dataset(id)
                 UUID = dataset_info['uuid'].replace("-", "")
                 file_path = get_filepath(UUID)
                 outputs = __get_file_json(file_path)
