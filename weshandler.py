@@ -1,5 +1,7 @@
 import time
 import json
+import sqlalchemy as sa
+from sqlalchemy import Table
 
 def get_filepath(UUID):
     GALAXY_DATABASE_CONN = "postgresql://galaxy:globus_genomics_pass@rds.ops.globusgenomics.org:5432/galaxy_nihcommons"
