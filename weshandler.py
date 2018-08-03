@@ -1,6 +1,33 @@
 import time
 import json
+import sqlalchemy as sa
+from sqlalchemy import Table
 
+def get_filepath(UUID):
+    GALAXY_DATABASE_CONN = "postgresql://galaxy:globus_genomics_pass@rds.ops.globusgenomics.org:5432/galaxy_nihcommons"
+    galaxy_db_conn = sa.create_engine(GALAXY_DATABASE_CONN).connect()
+    galaxy_db_meta = sa.MetaData(bind=galaxy_db_conn)
+
+    dataset_table = sa.Table("dataset", galaxy_db_meta, autoload=True)
+
+    dataset_id = galaxy_db_conn.execute(sa.sql.select([dataset_table.c.id]).where(dataset_table.c.uuid == UUID)).fetchone()[0]
+    dir_num =  get_dir_num(dataset_id)
+    file_path = "/scratch/galaxy/files/{0}/dataset_{1}.dat".format(get_dir_num(dataset_id), dataset_id)
+    return file_path
+
+def get_dir_num(dataset_id):
+  if dataset_id < 1000:
+    return "000"
+  tmp = str(dataset_id)[:-3]
+  if len(tmp) == 1:
+    return "00{0}".format(tmp)
+  else:
+    return "0{0}".format(tmp)
+
+def __get_file_json(file_path):
+    with open(file_path) as f:
+        data = json.load(f)
+    return data
 
 def __service_info():
 	return """
@@ -43,8 +70,10 @@ def __get_workflow_details(gi, invocation_id):
         for content in gi.histories.show_history(invocation['history_id'], contents=True):
             if "Minid for history" in content['name'] and content['deleted'] is False:
                 id = content['id']
-                dataset_content = gi.datasets.show_dataset(id)['peek']
-                outputs = dataset_content
+                dataset_info = gi.datasets.show_dataset(id)
+                UUID = dataset_info['uuid'].replace("-", "")
+                file_path = get_filepath(UUID)
+                outputs = __get_file_json(file_path)
 
     workflow_log = { "name": "string", "cmd": [ "string" ], "start_time": invocation["update_time"], "end_time": "string", "stdout": "string", "stderr": "string", "exit_code": 0 }
     return { "outputs" : outputs, "workflow_id" : invocation_id, "state" : history_state, "task_logs": invocation['steps'], "workflow_log" : workflow_log}
